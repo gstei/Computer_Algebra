@@ -1,0 +1,159 @@
+\section{Newton Polynomische Interpolation}
+\subsection{Collocation}
+Collocation = All measurement points are represented by a function, for example a polynomial.
+The polynomial
+$$
+y(x)=p(x)=c_{0}+c_{1} x^{1}+c_{2} x^{2}+\ldots+c_{m} x^{m} \quad \text { mit } \quad y\left(x_{k}\right)=p\left(x_{k}\right)=y_{k} \quad(k=0,1, \ldots, n)
+$$
+results in  a linear equation system with a degree of n+1.
+\subsection{Aitken-Neville Rekursionsformel}
+One way to solve this is by searching a polynomial formula as can be seen below. (It would also possible to generate a function by connecting the different data points with a straight line. $\Rightarrow$ On a Computer this would take a lot of computational effort, since one would have a lot of if and else statements)
+$$
+y(x)=p(x)=c_0+c_1 x^1+c_2 x^2+c_3 x^3+\cdots+c_{m-1} x^{m-1}+c_m x^m \quad\left(c_0, c_1, \ldots \in \mathbb{R}\right)
+$$
+To get the solution of this polynomial, one has to solve the following equation system:
+$$
+\begin{aligned}
+&y_0=c_0+c_1 x_0{ }^1+c_2 x_0{ }^2++c_3 x_0^3+\cdots+c_{m-1} x_0{ }^{m-1}+c_m x_0{ }^m \\
+&y_1=c_0+c_1 x_1{ }^1+c_2 x_1{ }^2++c_3 x_1{ }^3+\cdots+c_{m-1} x_1{ }^{m-1}+c_m x_1{ }^m \\
+&\vdots \\
+&y_n=c_0+c_1 x_n{ }^1+c_2 x_n{ }^2++c_3 x_n{ }^3+\cdots+c_{m-1} x_n{ }^{m-1}+c_m x_n{ }^m
+\end{aligned}
+$$
+As one can see, this equation system gets really large and could be difficult to be solved on a microcontroller. But there exists a nice algorithm which makes solving this system easier, called Aitken-Neville recursion which divides the huge equation system in little parts.
+$$
+p(x)=p_{0,1,2, \ldots, n-1, n}(x)=\frac{\left(x-x_0\right) \textcolor{green}{\overbrace{p_{1,2, \ldots, n-1, n}}^{\text {green }}(x)}-\left(x-x_n\right) \textcolor{red}{\overbrace{p_{0,1,2, \ldots, n-1}}^{\text {red }}(x)}}{\left(x_n-x_0\right)}
+$$
+The formula above shows how the global interpolating polynomial is combined from the partial interpolation polynomials $\textcolor{red}{p_{0,1,2, \ldots, n-1}(x)}$and $\textcolor{green}{p_{1,2, \ldots, n-1, n}(x)}$. On this partial interpolation polynomials, one can again apply the formula until one ends up with only two datapoints.
+\subsection{Newton basis polynomials}
+Since the calculation with the Aitken-Neville recursion is quite tedious. Newton came up with another basis polynomial $\pi_k(x)$ with $k=0,1,2,...,n$ (Aitken-Neville recursion used $(1,x^1,x^2,....,x^m)$
+\begin{equation}\label{eq:newton_basis_polynomials}
+    \begin{aligned}
+    &\pi_0(x)=1 \\
+    &\pi_1(x)=\left(x-x_0\right) \\
+    &\pi_2(x)=\left(x-x_0\right)\left(x-x_1\right) \\
+    &\vdots \\
+    &\pi_k(x)=\left(x-x_0\right)\left(x-x_1\right) \cdots\left(x-x_{k-1}\right) \\
+    &\vdots \\
+    &\pi_n(x)=\left(x-x_0\right)\left(x-x_1\right) \cdots\left(x-x_{n-1}\right)
+    \end{aligned}
+\end{equation}
+Which results in the final polynomial which can be seen in \autoref{eq:newton_polynomials}
+\begin{equation}\label{eq:newton_polynomials}
+    p(x)=a_0 \pi_0(x)+a_1 \pi_1(x)+a_2 \pi_2(x)+\cdots+a_m \pi_m(x)
+\end{equation}
+
+When one now writes the equation system one sees that this system is much easier to solve:
+$$
+\begin{aligned}
+y_0 &=a_0 \\
+y_1 &=a_0+a_1\left(x_1-x_0\right) \\
+y_2 &=a_0+a_1\left(x_2-x_0\right)+a_2\left(x_2-x_0\right)\left(x_2-x_1\right) \\
+& \vdots \\
+y_n &=a_0+a_1 \pi_1\left(x_n\right)+a_2 \pi_2\left(x_n\right)+\cdots+a_n \pi_n\left(x_n\right)
+\end{aligned}
+$$
+When one also applies the Aitken-Neville recursion it even get easier and independent of the order, since one just calculates divided differences.
+Below one can see the calculation of the first $a_k$ terms.
+$$
+\begin{array}{|l|l|}
+\hline k=0 & y\left(x_0\right) \\
+\hline k=1: y\left(x_0, x_1\right) & \frac{y\left(x_1\right)-y\left(x_0\right)}{\left(x_1-x_0\right)} \\
+\hline k=2: y\left(x_0, x_1, x_2\right) & \frac{y\left(x_1, x_2\right)-y\left(x_0, x_1\right)}{\left(x_2-x_0\right)} \\
+\hline k=3: y\left(x_0, x_1, x_2, x_3\right) & \frac{y\left(x_1, x_2, x_3\right)-y\left(x_0, x_1, x_2\right)}{\left(x_3-x_0\right)} \\
+\hline
+\end{array}
+$$
+Where $y\left(x_0, x_1, \ldots, x_k\right)$ is called the divided difference.
+$$
+y\left(x_0, x_1, \ldots, x_k\right)=\frac{y\left(x_1, x_2, \ldots, x_k\right)-y\left(x_0, x_1, \ldots, x_{k-1}\right)}{\left(x_k-x_0\right)} \quad(k=0,1, \ldots, n)
+$$
+
+When the points have the same distance to each other, the formula gets even easier:
+$$
+y\left(x_0, x_1, \ldots, x_k\right)=\frac{\Delta^k y_0}{h^k k !}
+$$
+\subsection{Example: Collocation polynomial}
+Given is the following dataset: 
+$$
+\{(0,1),(1,1),(2,2),(4,5)\}=\left\{\left(x_k, y_k\right) \mid k=0,1, \ldots, n=3\right\}
+$$
+Calculate the collocation polynomial.\newline\newline
+One can do the calculation the following way:
+\[
+	\begin{array}{cccccc}
+	x_0 & y_0 \\
+	    &     & \Delta y_0 \\
+	x_1 & y_1 &             & \Delta^2 y_0\\
+	    &     & \Delta y_1  &              & \Delta^3 y_0\\
+	x_2 & y_2 &             & \Delta^2 y_1 &             & \Delta^4 y_0\\
+	    &     & \Delta y_2  &              & \Delta^3 y_1\\
+	x_3 & y_3 &             & \Delta^2 y_2\\
+	    &     & \Delta y_3 \\
+	x_4 & y_4
+	\end{array}
+\]
+and therefore get the following result for the given data points:
+\[
+	\begin{array}{c|c|ccc}
+ x & y & \pi_1 & \pi_2 &\pi_3\\
+\hline
+	\textcolor{gray}{\underbrace{\textcolor{brown}{0}}_{x_0}} & \textcolor{gray}{\underbrace{\textcolor{orange}{1}}_{a_0}}\\
+	    &     & \frac{1-\textcolor{orange}{1}}{\textcolor{pink}{1}-\textcolor{brown}{0}}=\textcolor{gray}{\underbrace{\textcolor{blue}{0}}_{a_1}} \\
+	\textcolor{gray}{\underbrace{\textcolor{pink}{1}}_{x_1}} & 1&             & \frac{1-0}{2-0}=\textcolor{gray}{\underbrace{\textcolor{green}{\frac{1}{2}}}_{a_2}}\\
+	    &     & \frac{2-1}{2-1}=1  &              & \frac{\frac{1}{6}-\frac{1}{2}}{4-0}=-\textcolor{lime}{\frac{1}{12}}\\
+	2 & 2&             & \frac{\frac{3}{2}-1}{4-1}=\frac{1}{6}\\           
+	    &     & \frac{5-2}{4-2}=\frac{3}{2}\\         
+	4 & 5         
+
+	\end{array}
+\]
+According to \autoref{eq:newton_polynomials} one gets then the following result:
+$$
+\begin{aligned}
+&y(x)=p(x)=\textcolor{orange}{1}+\textcolor{blue}{0} \pi_1(x)+\textcolor{green}{\frac{1}{2}} \pi_2(x)+\textcolor{lime}{\frac{-1}{12}} \pi_3(x)= \\
+&1+0(x-\textcolor{brown}{0})+\frac{1}{2}(x-\textcolor{brown}{0})(x-\textcolor{pink}{1})+\textcolor{lime}{\frac{-1}{12}}(x-\textcolor{brown}{0})(x-\textcolor{pink}{1})(x-2)
+\end{aligned}
+$$
+\subsection{Further information}
+It does not depend on which data point one uses first and which one as last element. The resulting formula might look different (different $a_k$ coefficients, but the last one is the same), but the result is exactly the same. Furthermore, the data points must not have the same spacing.
+\subsection{Problems}
+With a lot of data point the runge phenomenon occurs (oscillations with high frequencies and amplitudes towards the boundaries of the arguments range)
+To calculate the error which can be seen one can use the following formula:
+$$
+y(x)-p(x)=\frac{f^{(n+1)}(\xi)}{(n+1) !}\left(x-x_0\right)\left(x-x_1\right) \cdots\left(x-x_{n-1}\right)\left(x-x_n\right)=\frac{f^{(n+1)}(\xi)}{(n+1) !} \pi_{n+1}(x)
+$$
+Where $\xi$ is a new data point. \newline
+$\frac{f^{(n+1)}(\xi)}{(n+1) !}$ can also be substituted by $\Rightarrow C=\frac{f^{(n+1)}(\xi)}{(n+1) !}$ \newline
+It is a newton polynomial with one more argument. $\frac{f^{(n+1)}(\xi)}{(n+1) !}$ is a higher order derivative which we do not know at the moment. The formula can also be rewritten in \autoref{eq:oscullation_error_1}:
+\begin{equation}\label{eq:oscullation_error_1}
+y(x)=\underbrace{\frac{f^{(n+1)}(\xi)}{(n+1) !}}_{C} \pi_{n+1}(x)+p(x) 
+\end{equation}
+When generalizing it one can also write \autoref{eq:oscullation_error_2}
+\begin{equation}\label{eq:oscullation_error_2}
+\begin{aligned}
+& y(x)-p(x)=\frac{\textcolor{gray}{\overbrace{\textcolor{black}{y^{(d)}}}^{\text{d'th derivative}}}(\xi)}{d !}\left(x-x_0\right)^{d_0}\left(x-x_1\right)^{d_1} \cdots\left(x-x_n\right)^{d_n} \quad\quad  (d=d_0+d_1+...d_n) \\
+& x, \xi \in\left(\min x_i, \max x_i\right)_{i=0,1, \ldots, n}
+\end{aligned}
+\end{equation}
+\subsubsection{Error Calculation example}
+The model fucntion $y(x)=sin(\frac{1}{2}\pi x)$ has to be interpolated using the arguments $x=0;1;2$ by a quadratic polynomial p(x), what is the error at the position $x=\frac{1}{2}$
+\[
+	\begin{array}{c|c|ccc}
+ x & y & \pi_1 & \pi_2 &\pi_3\\
+\hline
+	\textcolor{brown}{0} & sin(\frac{1}{2}\pi \textcolor{brown}{0})=\textcolor{ForestGreen}{0}\\
+	    &     & \frac{\textcolor{red}{1}-\textcolor{ForestGreen}{0}}{\textcolor{pink}{1}-\textcolor{brown}{0}}=\textcolor{blue}{1} \\
+	\textcolor{pink}{1} & sin(\frac{1}{2}\pi \textcolor{pink}{1})=\textcolor{red}{1}&             & \frac{-1-\textcolor{blue}{1}}{\textcolor{violet}{2}-\textcolor{brown}{0}}=\textcolor{green}{-1}\\
+	    &     & \frac{\textcolor{olive}{0}-\textcolor{red}{1}}{\textcolor{violet}{2}-\textcolor{pink}{1}}=-1  & \\             
+	\textcolor{violet}{2} & sin(\frac{1}{2}\pi \textcolor{violet}{0})=\textcolor{olive}{0}&                    
+
+	\end{array}
+\]
+Error = $y(x)-p(x)=sin(\frac{1}{2}\pi x)-\underbrace{(-x^2+2x)}_{\textcolor{ForestGreen}{0}+\textcolor{red}{1}(x-\textcolor{brown}{0})+\textcolor{blue}{1}(x-\textcolor{brown}{0})(x-\textcolor{pink}{1})}$
+\section{Chebyshev arguments}
+To reduce the error mentioned above to a minimum one can use a chebyshev distribution of the arguments.
+$$
+x_k=\cos \left(\frac{2 k+1}{2(n+1)} \pi\right) \quad(k=0,1, \ldots, n)
+$$
+\subsubsection{Exercise 2 and 3 of excercise sheet 2 are important for the exam!}

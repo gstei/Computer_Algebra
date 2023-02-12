@@ -1,0 +1,51 @@
+
+$$
+\begin{array}{|l|c|c|c|}
+\hline & \text { Zeitbereich } & \multicolumn{2}{c|}{\text { Frequenzbereich }} \\
+\hline \text { Linearity } & c_1 x_1(t)+c_2 x_2(t) & c_1 X_1(f)+c_2 X_2(f) & c_1 X_1(j \omega)+c_2 X_2(j \omega) \\
+\hline \text { Faltung } & x(t) * y(t) & X(f) \cdot Y(f) & X(j \omega) \cdot Y(j \omega) \\
+\hline \text { Multiplikation } & x(t) \cdot y(t) & X(f) * Y(f) & \frac{1}{2 \pi} X(j \omega) * Y(j \omega) \\
+\hline \text { Verschiebung } & x\left(t-t_0\right) & X(f) \cdot e^{-j 2 \pi f t_0} & X(j \omega) \cdot e^{-j \omega t_0} \\
+\hline \text { Modulation } & e^{j 2 \pi f_0 t} \cdot x(t) & X\left(f-f_0\right) & X\left(j\left[\omega-\omega_0\right]\right) \\
+\hline \text { lineare Gewichtung } & t \cdot x(t) & -\frac{1}{j 2 \pi} \frac{d}{d f} X(f) & -\frac{d}{d(j \omega)} X(j \omega) \\
+\hline \text { Differentiation } & \frac{d}{d t} x(t) & j 2 \pi f \cdot X(f) & j \omega \cdot X(j \omega) \\
+\hline \text { Integration } & \int_{-\infty}^t x(\tau) d \tau & \frac{1}{j 2 \pi f} X(f)+ 
+\frac{1}{2} X(0) \delta(f) & \frac{1}{j \omega} X(j \omega)+\pi X(0)  \delta(f)\\
+\hline \text { Skalierung } & x(a t) & \frac{1}{|a|} \cdot X\left(\frac{f}{a}\right) & \frac{1}{|a|} \cdot X\left(\frac{j \omega}{a}\right)\delta(\omega) \\
+\hline \text { Zeitinversion } & x(-t) & X(-f) & X(-j \omega) \\
+\hline \text { konj. komplex } & x^*(t) & X^*(-f) & X^*(-j \omega) \\
+\hline \text { Real part } & x_{\mathrm{R}}(t) & X_{\mathrm{g}^*}(f) & X_{\mathrm{g}^*}(j \omega) \\
+\hline \text { Imaginary part } & j x_{\mathrm{I}}(t) & X_{\mathrm{u}^*}(f) & X_{\mathrm{u}^*}(j \omega) \\
+\hline \text { duality } & X(t)[X(j t)] & x(-f) & 2 \pi x(-\omega) \\
+\hline \text { Parsevalsches Theorem } & \multicolumn{3}{c|}{\int_{-\infty}^{\infty} x(t) \cdot y^*(t) d t=\int_{-\infty}^{\infty} X(f) \cdot Y^*(f) d f=\frac{1}{2 \pi} \int_{-\infty}^{\infty} X(j \omega) \cdot Y^*(j \omega) d \omega} \\
+\hline
+\end{array}
+$$
+$$
+\begin{array}{|c|c|c|c|}
+\hline \text { Nr. } & x(t) & X(f) & X(j \omega) \\
+\hline \hline 1 & \delta(t) & 1 & 1 \\
+\hline 2 & 1 & \delta(f) & 2 \pi \delta(\omega) \\
+\hline 3 & \mathrm{U}_T(t) & \frac{1}{|T|} \mathrm{IH}_{\frac{1}{T}}(f) & \frac{2 \pi}{|T|} \mathrm{U}_{\frac{2 \pi}{T}}(\omega) \\
+\hline 4 & \varepsilon(t) & \frac{1}{2} \delta(f)+\frac{1}{j 2 \pi f} & \pi \delta(\omega)+\frac{1}{j \omega} \\
+\hline 5 & \operatorname{sgn}(t) & \frac{1}{j \pi f} & \frac{2}{j \omega} \\
+\hline 6 & \frac{1}{\pi t} & -j \operatorname{sgn}(f) & -j \operatorname{sgn}(\omega) \\
+\hline 7 & \operatorname{rect}\left(\frac{t}{T}\right)\quad (T=width) & |T| \cdot \operatorname{si}(\pi T f) & |T| \cdot \operatorname{si}\left(\frac{T}{2} \omega\right) \\
+\hline 8 & \operatorname{si}\left(\pi \frac{t}{T}\right) & |T| \cdot \operatorname{rect}(T f) & |T| \cdot \operatorname{rect}\left(\frac{T}{2 \pi} \omega\right) \\
+\hline 9 & \Lambda\left(\frac{t}{T}\right) & |T| \cdot \mathrm{si}^2(\pi T f) & |T| \cdot \operatorname{si}^2\left(\frac{T}{2} \omega\right) \\
+\hline 10 & \mathrm{si}^2\left(\pi \frac{t}{T}\right) & |T| \cdot \Lambda(T f) & |T| \cdot \Lambda\left(\frac{T}{2 \pi} \omega\right) \\
+\hline 11 & e^{j 2 \pi f_0 t} & \delta\left(f-f_0\right) & 2 \pi \delta\left(\omega-\omega_0\right) \\
+\hline 12 & \cos \left(2 \pi f_0 t\right) & \frac{1}{2}\left[\delta\left(f+f_0\right)+\delta\left(f-f_0\right)\right] & \pi\left[\delta\left(\omega+\omega_0\right)+\delta\left(\omega-\omega_0\right)\right] \\
+\hline 13 & \sin \left(2 \pi f_0 t\right) & \frac{1}{2} j\left[\delta\left(f+f_0\right)-\delta\left(f-f_0\right)\right] & \pi j\left[\delta\left(\omega+\omega_0\right)-\delta\left(\omega-\omega_0\right)\right] \\
+\hline 14 & e^{-a^2 t^2} & \frac{\sqrt{\pi}}{a} e^{-\frac{\pi^2 f^2}{a^2}} & \frac{\sqrt{\pi}}{a} e^{-\frac{\omega^2}{4 a^2}} \\
+\hline 15 & e^{-\frac{|t|}{T}} & \frac{2 T}{1+(2 \pi T f)^2} & \frac{2 T}{1+(T \omega)^2} \\
+\hline
+\end{array}
+$$
+Where 
+$$
+\operatorname{sinc}(x)=\frac{\sin \pi x}{\pi x}
+$$
+$$
+\operatorname{si}(x)=\frac{\sin x}{x}
+$$

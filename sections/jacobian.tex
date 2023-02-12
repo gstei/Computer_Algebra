@@ -1,0 +1,223 @@
+\section{Differentials, Taylor formulas and Jacobian}
+\subsection{Differential}
+\subsubsection{Definition}\label{subsubsec:differential}
+The purpose of differential is to measure error propagation. (How much is $y$(dependent variable) wrong when $x$(independent variable) is wrong by a certain amount).
+The differential $df$ is the linear amount of change between a variable and a function, as it can be seen in \autoref{eq:delta_f}. Whereby $\Delta f$ is the hole amount of change, not only the linear one (The difference between two points). For small $dx$ on can say $\Delta f \approx df$ and $\frac{\Delta f}{f} \approx \frac{d f\left(x_{0}\right)}{f\left(x_{0}\right)}$.
+\begin{equation}\label{eq:delta_f}
+\Delta f=f\left(x_{0}+h\right)-f\left(x_{0}\right) \approx d f=f^{\prime}\left(x_{0}\right) d x=f^{\prime}\left(x_{0}\right) h=f^{\prime}\left(x_{0}\right) \Delta x
+\end{equation}
+\subsection{Taylor}
+As one has seen before, $\Delta f \approx df$ for small $dx$ and one has used only the linear part. To further improve the approximation one could not only use the linear part (first derivative) but also the squared (second derivative) and so on. Therefore, a function at a certain point can be approximated by it's derivates at this point, which is called \href{https://en.wikipedia.org/wiki/Taylor_series}{Taylor series approximation}, which can be seen in \autoref{eq:taylor_sries_aproximation_one_dim} for the one dimensional case and in \autoref{eq:taylor_sries_aproximation} for the multidimensional case.
+\begin{equation}\label{eq:taylor_sries_aproximation_one_dim}
+\Delta f=\frac{1}{1 !} d f\left(x_{0}\right)+\frac{1}{2 !} d^{2} f\left(x_{0}\right)+\ldots+\frac{1}{n !} d^{n} f\left(x_{0}\right)+R_{n}\left(x_{0}, h\right)
+\end{equation}
+The vector field of of the partial derivative is called gradient of $f$ and is denoted with $\operatorname{grad}(f)$ or $\vec{\nabla} f(\vec{x})$. Therefore $\Delta f \approx \vec{\nabla} f(\vec{x}) \cdot \vec{h}$. \autoref{eq:taylor_sries_aproximation} shows the taylor series approximation for the multi-indices  $\alpha=\left\{\alpha_{1}, \ldots, \alpha_{n}\right\}$ and $|\alpha|=\alpha_{1}+\ldots+\alpha_{n}$.
+\begin{equation}\label{eq:taylor_sries_aproximation}
+f\left(\vec{x}_0+\vec{h}\right)=f\left(\vec{x}_0\right)+\frac{1}{1 !} \vec{\nabla} f\left(\vec{x}_0\right) \cdot \vec{h}+\sum_{|\alpha|=2}^N \frac{1}{\alpha !} \frac{\partial^{|\alpha|} f\left(\vec{x}_0\right)}{\partial x^\alpha} \vec{h}^\alpha+\sum_{|\alpha|=N+1} R_\alpha\left(\vec{x}_0, \vec{h}\right) \vec{h}^\alpha
+\end{equation}
+The remainder terms $R_\alpha\left(\vec{x}_0, \vec{h}\right)$ are absolutely bounded by $\max _{\vec{x} \in S}\left|\frac{1}{\alpha !} \frac{\partial^\alpha f(\vec{x})}{\partial x^\alpha}\right|$ with $|\alpha|=N+1$ and
+ $S=\vec{x}_0+\left(\left[-h_1, h_1\right] \times\left[-h_2, h_2\right] \times \cdots \times\left[-h_n, h_n\right]\right)$ is a n-dimensional 'rectangle' with center $\vec{x_0}$. (This idea can be used afterwards by the Jacobian matrix and the determinant) \newline
+The formulas for up to order four can be found in \autoref{eq:taylor_sries_aproximation_order_4}
+\begin{equation}\label{eq:taylor_sries_aproximation_order_4}
+\begin{aligned}
+&f(x, y)=f(0+x, 0+y) \approx\\
+&f(0,0)+\frac{\partial f}{\partial x} \cdot x+\frac{\partial f}{\partial y} \cdot y+\frac{\partial^2 f}{\partial x^2} \cdot \frac{1}{2 !} x^2+\frac{\partial^2 f}{\partial x \partial y} \cdot \frac{1}{1 ! 1 !} \cdot x y+\frac{\partial^2 f}{\partial y^2} \cdot \frac{1}{2 !} \cdot y^2+\\
+& +\frac{\partial^3 f}{\partial x^3} \cdot \frac{1}{3 !} \cdot x^3+\frac{\partial^3 f}{\partial x^2 \partial y} \cdot \frac{1}{2 ! 1 !} \cdot x^2 y+\frac{\partial^3 f}{\partial x \partial y^2} \cdot \frac{1}{1 ! 2 !} \cdot x y^2+\frac{\partial^3 f}{\partial y^3} \cdot \frac{1}{3 !} \cdot y^3+ \\
+& +\frac{\partial^4 f}{\partial x^4} \cdot \frac{1}{4 !} x^4+\frac{\partial^4 f}{\partial x^3 \partial y} \cdot \frac{1}{3 ! 1 !} \cdot x^3 y+\frac{\partial^4 f}{\partial x^2 \partial y^2} \cdot \frac{1}{2 ! 2 !} \cdot x^2 y^2+\frac{\partial^4 f}{\partial x \partial y^3} \cdot \frac{1}{1 ! 3 !} \cdot x y^3+ \\
+& +\frac{\partial^4 f}{\partial y^4} \cdot \frac{1}{4 !} \cdot y^4 \\
+&
+\end{aligned}
+\end{equation}
+\subsubsection{Example}
+The bivariate symmetric (!) function $f(x, y)=e^{-\frac{x^2+y^2}{2}}$ has to be approximated by a bivariate Taylor polynomial of order 4 around (0,0) by
+
+\begin{enumerate}
+    \item evaluating and using \autoref{eq:taylor_sries_aproximation} for the partial derivatives.
+    $$
+    \begin{aligned}
+    & 1+0 x+0 y-\frac{1}{2} x^2+0 x y-\frac{1}{2} y^2+0 x^3+0 x^2 y+0 x y^2 \\
+    + & 0 y^3+\frac{3}{4 !=24} x^4+0 x^3 y+\frac{1}{2 \cdot 2} x^2 y^2+0 x y^3+\frac{3}{24} y^4 \\
+    = & \underline{\underline{1-\frac{1}{2} x^2-\frac{1}{2} y^2+\frac{3}{24} x^4+\frac{1}{4} x^2 y^2+\frac{3}{24} y^4}}
+    \end{aligned}
+    $$
+    \item multiplying the univariate Taylor series for the exponential function,
+    $$
+    \begin{aligned}
+    & f=e^{-\frac{x^2}{2}} \cdot e^{-\frac{y^2}{2}} \approx\left(1-\frac{x^2}{2}+\frac{x^4}{4 \cdot 2}+\ldots\right) \cdot\left(1-\frac{y^2}{2}+\frac{y^4}{4 \cdot 2}+\ldots\right) \ldots \\
+    & \left(\text { by substituting } u=-\frac{x^2}{2} \text { and } u=-\frac{y^2}{2}\right. \text {, resp.) } \\
+    & \ldots=\underline{\underline{1-\frac{x^2}{2}-\frac{y^2}{2}+\frac{x^4}{8}+\frac{1}{4} x^2 y^2+\frac{y^4}{8}+\cdots)}}
+    \end{aligned}
+    $$
+    \item substituting into the univariate Taylor series for the exponential function
+    $$
+    \begin{aligned}
+    & \text { Subst: } u=-\frac{x^2+y^2}{2} \Rightarrow f \approx 1-\frac{x^2+y^2}{2}+\frac{1}{2}\left(\frac{x^2+y^2}{2}\right)^2 \\
+    & =\underline{\underline{1-\frac{x^2}{2}-\frac{y^2}{2}+\frac{1}{8} x^4+\frac{1}{4} x^2 y^2+\frac{1}{8} y^4}}
+    \end{aligned}
+    $$
+    \item What value do you expect for the error limit: $\lim _{\|h\| \rightarrow 0} \frac{\text { "Approximation error }}{\|h\|^4}$
+    $$
+    \begin{aligned}
+    & \lim _{\|h\| \rightarrow 0} \frac{\text { "Error" }}{\|h\|^4}=0 \\
+    & \left(\|h\|=\sqrt{h_1^2+h_2^2}=\sqrt{x^2+y^2}\right) \\
+    & \begin{array}{l}
+    \text{In c):}-\frac{x^2+y^2}{2}=u=-\frac{\|h\|^2}{2}(!). \\
+    e^h=f\approx \underbrace{1-\frac{\|h\|^2}{2}+\frac{\|h\|^4}{8}}_{\text {"4th order}}-\frac{\|h\|^6}{48}+-\ldots
+    \end{array} \\
+    & \Rightarrow \text { Error }=-\frac{\|h\|^6}{48}+-\cdots \\
+    & \Longrightarrow \frac{\text{Error}}{\|h\|^4}=-\frac{\|h\|^2}{48}+-\overrightarrow{\|h\| \rightarrow c} 0 \text { ob) } \\
+    &
+    \end{aligned}
+    $$
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+\subsection{Jacobian matrix and determinant}
+In the Taylor series approximation for multi-indices, one has seen that $\Delta f \approx \vec{\nabla} f(\vec{x}) \cdot \vec{h}$ for small $dx$ (see also \autoref{eq:taylor_sries_aproximation}). When one writes all those gradients in one matrix, one gets the so-called Jacobian matrix. Which actually tells us the same as mentioned in \autoref{subsubsec:differential}, but just for a multivariable problem. It tells us how $y_1,y_2, \ldots$ (dependent variable) changes when,  $x_1,x_2, \ldots$ (independent variable) changes. Furthermore it has the nice property that the determinant of this matrix also describes how the volume changes when one changes a certain variable.Therefore the Matrix can be used to analyse the error propagation or make volume calculation in a different coordinate system. \newline
+Below one can find some definitions.
+\begin{equation}
+\frac{\partial \vec{f}(u, v)}{\partial u}=\left(\begin{array}{c}
+\frac{\partial x(u, v)}{\partial u} \\
+\frac{\partial y(u, v)}{\partial u}
+\end{array}\right) \text { and } \frac{\partial f(u, v)}{\partial v}=\left(\begin{array}{c}
+\frac{\partial x(u, v)}{\partial v} \\
+\frac{\partial y(u, v)}{\partial v}
+\end{array}\right)
+\end{equation}
+\begin{equation}
+\underbrace{d y_1 d y_2 \cdots d y_n}_{\text {"transformed volume element" }}=\operatorname{det}\left(J_f(\vec{x})\right) \underbrace{d x_1 d x_2 \cdots d x_n}_{\text {volume element }}
+\end{equation}
+\begin{equation}
+\underbrace{\Delta y_1 \Delta y_2 \cdots \Delta y_n}_{\text {"transformed volume" }} \approx \operatorname{det}\left(J_f(\vec{x})\right) \underbrace{\Delta x_1 \Delta x_2 \cdots \Delta x_n}_{\text {"volume" }}
+\end{equation}
+In the special case that n = m the Jacobian matrix is a square matrix and thus has a determinant (called Jacobian determinant):
+\begin{equation}
+\frac{D\left(f_{1}, f_{2}, \ldots, f_{n}\right)}{D\left(x_{1}, x_{2}, \ldots, x_{n}\right)}=\operatorname{det}\left(J_{f}(\vec{x})\right) \quad \text { or } \quad \operatorname{det}\left(J_{f}\right)=\sqrt{\operatorname{det}(\underbrace{J_{f}^{T}(\vec{x}) J_{f}(\vec{x})}_{\text {Diagonalmatrix }})} .
+\end{equation}
+\begin{equation}
+    T^{-1}: \operatorname{det}\left(J_{T}\right)=\frac{1}{\operatorname{det} J_{T^{-1}}}
+\end{equation}
+$$
+\mathbb{J}=\left[\begin{array}{ccc}
+\dfrac{\partial \mathbf{f}(\mathbf{x})}{\partial x_{1}} & \cdots & \dfrac{\partial \mathbf{f}(\mathbf{x})}{\partial x_{n}}
+\end{array}\right]=\left[\begin{array}{c}
+\nabla^{T} f_{1}(\mathbf{x}) \\
+\vdots \\
+\nabla^{T} f_{m}(\mathbf{x})
+\end{array}\right]=\left[\begin{array}{ccc}
+\dfrac{\partial f_{1}(\mathbf{x})}{\partial x_{1}} & \cdots & \dfrac{\partial f_{1}(\mathbf{x})}{\partial x_{n}} \\
+\vdots & \ddots & \vdots \\
+\dfrac{\partial f_{m}(\mathbf{x})}{\partial x_{1}} & \cdots & \dfrac{\partial f_{m}(\mathbf{x})}{\partial x_{n}}
+\end{array}\right]
+$$
+\subsubsection{Estimating navigation error by inversion of Jacobian determinant}
+Lets assume one measures an angle $(\alpha, \gamma)$ and want the position $(x,y)$. Let's call the transformation from $(\alpha, \gamma)$ to $(x,y)$ $T$ and from $(x,y)$ to $(\alpha, \gamma)$ $T^{-1}$
+$$
+\begin{aligned}
+&B=(-40,-40)=\left(x_1, y_1\right) \\
+&C=(-40,2140)=\left(x_2, y_2\right) \\
+&A=(3040,1050)=\left(x_3, y_3\right) \\
+&a=2180, c=3267.19 \\
+&P=(x, y) \\
+&\Delta \alpha=0.1^{\circ}, \Delta \gamma=0.1^{\circ}
+\end{aligned}
+$$
+To solve this problem one can follow the following approach:
+\begin{enumerate}
+    \item Description of the problem
+    \item Transformation (equalities) from cosine-theorems (generalized Pythagoreans)
+    \item Implicit differentiation
+    \item Computation of the Jacobian matrix $J_{T^{-1}}(x, y)$
+    \item Computation of the Jacobian determinant $\left|J_{T^{-1}}(x, y)\right|$
+    \item Elimination of angles
+    \item Computing $\left|J_T(\alpha, \gamma)\right|$ expressed in position coordinates $x, y$
+\end{enumerate}
+\subsubsection{Example three}
+The formulas $x=r \cos (\varphi), \quad y=r \sin (\varphi) \quad(0<r, \quad 0 \leq \varphi<2 \pi)$ define the coordinate
+transform T from polar coordinates $(r,\phi)$  to Cartesian coordinates $(x, y)$ in the punctured plane $\mathbb{R}^2 \backslash\{(0,0)\}$.\newline
+Compute the Jacobian matrix $J_T(r, \varphi)$ and its Jacobian (determinant) $\operatorname{det} J_T(r, \varphi)$ as well
+as the Jacobians (determinants) $\operatorname{det} J_T(x, y), \operatorname{det} J_{T^{-1}}(r, \varphi)$ and $\operatorname{det} J_{T^{-1}}(x, y)$ \newline\newline
+First of all one has to write down the transformations
+$$
+\begin{aligned}
+&x=r \cdot \cos{\phi} \\
+&y=r \cdot \sin{\phi}
+\end{aligned}
+$$
+Once one has done that one can calculate the Jacobian Matrix:
+$$
+\begin{aligned}
+J&=\left[\begin{array}{cc}
+\dfrac{\partial x}{\partial r} & \dfrac{\partial x}{\partial \phi} \\
+\dfrac{\partial y}{\partial r} & \dfrac{\partial y}{\partial \phi}
+\end{array}\right]\\&=\underline{\underline{\left[\begin{array}{cc}
+\cos{\phi}&-r \cdot \sin{\phi}\\
+\sin{\phi}& r \cdot \cos{\phi}
+\end{array}\right]}}
+\end{aligned}
+$$
+and afterwards the determinant
+$$
+\begin{aligned}
+\operatorname{det} J_T(r, \varphi)&=r\cdot \cos{\phi}^2 + r\cdot \sin{\phi}^2
+\\&=r \cdot \left( \cos{\phi}^2+\sin{\phi}^2\right)
+\\&=\underline{\underline{r}}
+\end{aligned}
+$$
+when one wants to express r in x and y one knows that $r = \sqrt{x^2+y^2}$ therefore 
+$$
+\underline{\underline{\operatorname{det} J_T(x, y)=\sqrt{x^2+y^2}}}
+$$
+and 
+$$
+\begin{aligned}
+\operatorname{det} J_T(r, \varphi)=\underline{\underline{\frac{1}{r}}}\\
+\operatorname{det} J_{T^{-1}}(x, y)=\underline{\underline{\frac{1}{\sqrt{x^2+y^2}}}}
+\end{aligned}
+$$
+\subsubsection{Example one}
+Elliptical coordinates $(\sigma, \tau)$ $(\sigma>1,-1<\tau<1)$ for a = 1 are connected to Cartesian coordinates (x, y) through the transforming formulas:
+$$
+\begin{aligned}
+&x=\sigma \tau \\
+&y=\sqrt{\sigma^2-1} \sqrt{1-\tau^2}
+\end{aligned}
+$$
+Compute the Jacobian matrix
+$$
+J=J(\sigma, \tau)
+$$
+$$
+\begin{aligned}
+J&=\left[\begin{array}{cc}
+\dfrac{\partial x}{\partial \sigma} & \dfrac{\partial x}{\partial \tau} \\
+\dfrac{\partial y}{\partial \sigma} & \dfrac{\partial y}{\partial \tau}
+\end{array}\right]\\&=\left[\begin{array}{cc}
+\tau&\sigma\\
+\frac{1}{2}\left(\sigma^2-1\right)^{-\frac{1}{2}}2\sigma\sqrt{1-\tau^2}& -\frac{1}{2}\left(1-\tau^2\right)^{-\frac{1}{2}}2\tau\sqrt{\sigma^2-1}
+\end{array}\right]\\&=\underline{\underline{\left[\begin{array}{cc}
+\tau&\sigma\\
+\frac{\sigma\sqrt{1-\tau^2}}{\sqrt{\sigma^2-1}}& -\frac{\tau\sqrt{\sigma^2-1}}{\sqrt{1-\tau^2}}
+\end{array}\right]}}
+\end{aligned}
+$$
+Express the Jacobian determinant
+$$
+\begin{aligned}
+det(J)&=-\frac{\tau^2\sqrt{\sigma^2-1}}{\sqrt{1-\tau^2}}-\frac{\sigma^2\sqrt{1-\tau^2}}{\sqrt{\sigma^2-1}}
+\\&=\frac{-\tau^2\left(\sigma^2-1\right)-\sigma^2\left(1-\tau^2\right)}{\sqrt{1-\tau^2}\sqrt{\sigma^2-1}}
+\\&=\underline{\underline{\frac{\tau^2-\sigma^2}{\sqrt{1-\tau^2}\sqrt{\sigma^2-1}}}}
+\end{aligned}
+$$
+Express the Jacobian determinant in {x, y}, since the denumerator is exactly y, we know it already. Furthermore the following is true: $\sqrt{\left(1+x^2+y^2\right)^2-4 x^2}=\sigma^2-\tau^2$
+$$
+det(J)=\underline{\underline{\frac{-\sqrt{\left(1+x^2+y^2\right)^2-4 x^2}}{y}}}
+$$

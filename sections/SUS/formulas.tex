@@ -1,0 +1,129 @@
+\section{Fromulas}
+\subsection{Differentation Formulas}
+\begin{multicols}{2}
+[]
+ \begin{enumerate}
+     \item $\frac{\mathrm{d}(u \pm v)}{\mathrm{d} x}=\frac{\mathrm{d} u}{\mathrm{~d} x} \pm \frac{\mathrm{d} v}{\mathrm{~d} x}$
+    \item $\frac{\mathrm{d}(k \cdot u)}{\mathrm{d} x}=k \cdot \frac{\mathrm{d} u}{\mathrm{~d} x} \quad(k$ konstant $)$
+    \item $\frac{\mathrm{d}(u \cdot v)}{\mathrm{d} x}=\frac{\mathrm{d} u}{\mathrm{~d} x} \cdot v+u \cdot \frac{\mathrm{d} v}{\mathrm{~d} x}$
+    \item $\frac{\mathrm{d}(u / v)}{\mathrm{d} x}=\frac{\frac{\mathrm{d} u}{\mathrm{~d} x} v-u \mathrm{~d} v}{v^{2}}$
+    \item $\frac{\mathrm{d} z}{\mathrm{~d} x}=\frac{\mathrm{d} z}{\mathrm{~d} y} \cdot \frac{\mathrm{d} y}{\mathrm{~d} x} \quad$ falls $z=f(y)$ und $y=g(x)$
+    \item $\frac{\mathrm{d}}{\mathrm{d} x}\left(x^{n}\right)=n x^{n-1}$
+    \item $\frac{\mathrm{d}}{\mathrm{d} x}\left(\mathrm{e}^{x}\right)=\mathrm{e}^{x}$
+    \item $\frac{\mathrm{d}}{\mathrm{d} x}\left(a^{x}\right)=a^{x} \ln a \quad(a>0)$
+    \item $\frac{\mathrm{d}}{\mathrm{d} x}(\ln x)=\frac{1}{x}$
+    \item $\frac{\mathrm{d}}{\mathrm{d} x}(\sin x)=\cos x$
+    \item $\frac{\mathrm{d}}{\mathrm{d} x}(\cos x)=-\sin x$
+    \item $\frac{\mathrm{d}}{\mathrm{d} x}(\tan x)=\frac{1}{\cos ^{2} x}$
+    \item $\frac{\mathrm{d}}{\mathrm{d} x}(\arcsin x)=\frac{1}{\sqrt{1-x^{2}}}$
+    \item $\frac{\mathrm{d}}{\mathrm{d} x}(\arctan x)=\frac{1}{1+x^{2}}$
+ \end{enumerate}
+\end{multicols}
+\subsection{Integration Formulas}
+\begin{multicols}{2}
+[]
+ \begin{enumerate}
+    \item $\int_{a}^{b}(u \pm v) \mathrm{d} x=\int_{a}^{b} u \mathrm{~d} x \pm \int_{a}^{b} v \mathrm{~d} x$
+    \item $\int_{a}^{b} k \cdot u \mathrm{~d} x=k \int_{a}^{b} u \mathrm{~d} x \quad(k$ konstant $)$
+    \item $\int_{x=a}^{b} f(g(x)) g^{\prime}(x) \mathrm{d} x=\int_{w=g(a)}^{g(b)} f(w) \mathrm{d} w$
+    \item $\int_{a}^{b} u \cdot \frac{\mathrm{d} v}{\mathrm{~d} x} \mathrm{~d} x=\left.(u \cdot v)\right|_{a} ^{b}-\int_{a}^{b} \frac{\mathrm{d} u}{\mathrm{~d} x} \cdot v \mathrm{~d} x$
+ \end{enumerate}
+\end{multicols}
+
+\subsection{Table of Indefinite Integrals}
+\begin{multicols}{2}
+[\subsubsection{Basic Functions}]
+ \begin{enumerate}
+\item $\int x^{n} \mathrm{~d} x=\frac{1}{n+1} x^{n+1}+C, n \neq-1$
+\item $\int \frac{1}{x} \mathrm{~d} x=\ln |x|+C$
+\item $\int a^{x} \mathrm{~d} x=\frac{1}{\ln a} a^{x}+C, a>0$
+\item $\int \ln x \mathrm{~d} x=x \ln x-x+C$
+\item $\int \sin x \mathrm{~d} x=-\cos x+C$
+\item $\int \cos x \mathrm{~d} x=\sin x+C$
+\item $\int \tan x \mathrm{~d} x=-\ln |\cos x|+C$
+ \end{enumerate}
+\end{multicols}
+
+
+\subsubsection{Products of $e^x$ and cox x and sin x}
+ \begin{enumerate}
+    \setcounter{enumi}{7}
+    \item $\begin{aligned}
+        \int \mathrm{e}^{a x} \sin (b x) \mathrm{d} x=\frac{1}{a^{2}+b^{2}} \mathrm{e}^{a x}(a \sin (b x)-b \cos (b x))+C\end{aligned}$ 
+    \item $\begin{aligned}
+        \int \mathrm{e}^{a x} \cos (b x) \mathrm{d} x=\frac{1}{a^{2}+b^{2}} \mathrm{e}^{a x}(a \cos (b x)+b \sin (b x))+C\end{aligned}$ 
+    \item $\begin{aligned} 
+        \int \sin (a x) \sin (b x) \mathrm{d} x=\frac{1}{b^{2}-a^{2}}(a \cos (a x) \sin (b x)-b \sin (a x) \cos (b x))+C, a \neq b\end{aligned}$ 
+    \item $\begin{aligned} 
+        \int \cos (a x) \cos (b x) \mathrm{d} x=\frac{1}{b^{2}-a^{2}}(b \cos (a x) \sin (b x)-a \sin (a x) \cos (b x))+C, a \neq b\end{aligned}$
+    \item $\begin{aligned} 
+        \int \sin (a x) \cos (b x) \mathrm{d} x=\frac{1}{b^{2}-a^{2}}(b \sin (a x) \sin (b x)+a \cos (a x) \cos (b x))+C, a \neq b\end{aligned}$
+ \end{enumerate}
+
+\subsubsection{Product of Polynomial $p(x)$ with $\ln x, \mathrm{e}^{x}, \cos x, \sin x$}
+ \begin{enumerate}
+    \setcounter{enumi}{12}
+    \item $\begin{aligned} 
+        \int x^{n} \ln x \mathrm{~d} x=\frac{1}{n+1} x^{n+1} \ln x-\frac{1}{(n+1)^{2}} x^{n+1}+C, n \neq-1\end{aligned}$
+    \item $\begin{aligned} 
+        \int p(x) \mathrm{e}^{a x} \mathrm{~d} x=\frac{1}{a} p(x) \mathrm{e}^{a x}-\frac{1}{a} \int p^{\prime}(x) \mathrm{e}^{a x} \mathrm{~d} x=\frac{1}{a} p(x) \mathrm{e}^{a x}-\frac{1}{a^{2}} p^{\prime}(x) \mathrm{e}^{a x}+\frac{1}{a^{3}} p^{\prime \prime}(x) \mathrm{e}^{a x}-\ldots\end{aligned}$\newline
+        (Sign alternate: $+-+-+-\ldots$ )
+    \item $\begin{aligned}
+        \int p(x) \sin (a x) \mathrm{d} x&=-\frac{1}{a} p(x) \cos (a x)+\frac{1}{a} \int p^{\prime}(x) \cos (a x) \mathrm{d} x\\ &=-\frac{1}{a} p(x) \cos (a x)+\frac{1}{a^{2}} p^{\prime}(x) \sin (a x)+\frac{1}{a^{3}} p^{\prime \prime}(x) \cos (a x)-\ldots 
+        \end{aligned}$\newline 
+        (Sign alternate in pairs after first term: $-++-++\ldots$ )
+    \item $\begin{aligned}
+        \int p(x) \cos (a x) \mathrm{d} x&=\frac{1}{a} p(x) \sin (a x)-\frac{1}{a} \int p^{\prime}(x) \sin (a x) \mathrm{d} x\\
+        &=\frac{1}{a} p(x) \sin (a x)+\frac{1}{a^{2}} p^{\prime}(x) \cos (a x)-\frac{1}{a^{3}} p^{\prime \prime}(x) \sin (a x)-\ldots
+    \end{aligned}$\newline
+    (Signs alternate in pairs: $++--++-\ldots$ )
+ \end{enumerate}
+
+\subsection{Taylor Polynomial/Series}
+Development of $f$ around $a$
+$$
+\begin{aligned}
+f(x) & \approx f(a)+f^{\prime}(a)(x-a)+\frac{f^{\prime \prime}(a)}{2 !}(x-a)^{2}+\frac{f^{\prime \prime \prime}(a)}{3 !}(x-a)^{3}+\ldots \\
+f(a+h) & \approx f(a)+f^{\prime}(a) h+\frac{f^{\prime \prime}(a)}{2 !} h^{2}+\frac{f^{\prime \prime \prime}(a)}{3 !} h^{3}+\ldots
+\end{aligned}
+$$
+in which $k !=1 \cdot 2 \cdot 3 \cdot \ldots \cdot k$.
+\subsubsection{Important Taylor Series}
+$$
+\begin{aligned}
+\mathrm{e}^{x} & =1+x+\frac{1}{2 !} x^{2}+\frac{1}{3 !} x^{3}+\ldots \\
+\cos x & =1-\frac{1}{2 !} x^{2}+\frac{1}{4 !} x^{4}-\frac{1}{6 !} x^{6}+\ldots \\
+\sin x & =x-\frac{1}{3 !} x^{3}+\frac{1}{5 !} x^{5}-\frac{1}{7 !} x^{7}+\ldots \\
+\frac{1}{1-x} & =1+x+x^{2}+x^{3}+x^{4}+\ldots \text{   (Geometric Series)}\\
+(1+x)^{p} & =1+p x+\frac{p(p-1)}{2 !} x^{2}+\frac{p(p-1)(p-2)}{3 !} x^{3}+\ldots \\
+\ln (1+x) & =x-\frac{x^{2}}{2}+\frac{x^{3}}{3}-\frac{x^{4}}{4}+\ldots
+\end{aligned}
+$$
+The last three only converge for $|x|<1$. 
+\subsection{Determinant}
+\subsubsection{Sarrus}
+\begin{figure}[ht]
+  \centering
+  \resizebox{0.7\textwidth}{!}{\subimport{images/}{sarrus}}
+  \caption{sarrus}
+  \label{fig:sarrus}
+\end{figure}
+\subsection{Matrix}
+\subsubsection{Transpose}
+\begin{equation}
+A=\left[\begin{array}{lll}
+a & b & c \\
+d & e & f
+\end{array}\right]_{2 \times 3} \quad A^{T}=\left[\begin{array}{ll}
+a & d \\
+b & e \\
+c & f
+\end{array}\right]_{3 \times 2}
+\end{equation}
+\subsubsection{Multiplication}
+\begin{figure}[ht]
+  \centering
+  \resizebox{0.7\textwidth}{!}{\subimport{images/}{matrix_multiplication}}
+  \caption{Matrix Multiplication}
+  \label{fig:matrix_multiplication}
+\end{figure}

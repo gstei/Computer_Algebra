@@ -1,0 +1,197 @@
+\section{Hermite Interplation (Osculation)}
+When the problem of collocation, which can be found on the following \href{https://mmeyer.tech/newton-polynomial-interpolation-collocation/}{post} is extended by the requirement that certain given values of derivatives of order 0 up to some higher order k of the model function y must be met at some of the arguments $x_0,x_1,..., x_n$ we end in an interpolation problem called osculation or \textbf{Hermite interpolation}. Furthermore note that one must use the modified newton polynomials as they can be seen in \autoref{eq:modified_newton_polynomials}, for the example provided there
+
+\subsection{Example: Hermite Interpolation and Error Callculation}
+We have railway track with the following points given:$(0;0),(2;1),(4;2)$ and also its derivatives. Now we have to search a polynomial $p_2$ which goes through point one and point two and fulfils it's derivatives. So we have the following conditions: $p_2(\textcolor{LimeGreen}{2})=\textcolor{orange}{1}, p_2'(\textcolor{Green}{2})=\textcolor{blue}{1}, p_2''(\textcolor{OliveGreen}{2})=\textcolor{green}{0}$ and $p_2'(4)=\textcolor{pink}{0}, p_2(4)=2, p_2''(4)=\textcolor{violet}{0}$
+
+% Which means we have six conditions.
+% $$
+% y(\underbrace{x_0, \ldots, x_n, x_{n+1}}_{(n+2)})=\frac{y^{(n+1)}(\xi)}{(n+1) !} \quad x=x_{n+1}, \textcolor{red}{\xi} \in\left(\min x_i, \max x_i\right)_{i=0,1, \ldots, n}
+% $$
+% with n=1 and $\textcolor{red}{\xi}$ unknown, we only know it is between $x_1$ and $x_2$
+\[
+	\begin{array}{c|c|ccccc}
+ x & y & y' & y''/2! &y'''/3! &y''''/4! &y'''''/5!\\
+\hline
+	\textcolor{gray}{\underbrace{\textcolor{LimeGreen}{2}}_{x_0}} & \textcolor{gray}{\underbrace{\textcolor{orange}{1}}_{a_0}}\\
+	    &     & \textcolor{gray}{\frac{y^{(1)}\left(x_0\right)}{1 !}=\underbrace{\textcolor{blue}{1}}_{a_1\text{ (given by ex.)}}} \\
+	\textcolor{gray}{\underbrace{\textcolor{Green}{2}}_{x_0}} & \textcolor{orange}{1}&             & \textcolor{red}{\frac{1}{2!}}\cdot\textcolor{gray}{\underbrace{\textcolor{green}{0}}_{a_2\text{ (given by ex.)}}}\\
+	    &     &  \textcolor{gray}{\frac{y^{(1)}\left(x_0\right)}{1 !}=\textcolor{blue}{1}}  &              & \textcolor{gray}{\underbrace{\textcolor{lime}{\frac{-1}{8}}}_{a_3}}\\
+	\textcolor{gray}{\underbrace{\textcolor{OliveGreen}{2}}_{x_0}} & \textcolor{orange}{1} &             & -\frac{1}{4} & & \textcolor{gray}{\underbrace{\textcolor{black}{\frac{1}{16}}}_{a_4}}\\           
+	    &     & \frac{2-\textcolor{orange}{1}}{4-\textcolor{OliveGreen}{2}}=\frac{1}{2} & & 0   &    & 0\\         
+	\textcolor{gray}{\underbrace{\textcolor{black}{4}}_{x_1}} & 2    & &\frac{\textcolor{pink}{0}-\frac{1}{2}}{4-\textcolor{OliveGreen}{2}}=-\frac{1}{4} & &\frac{1}{16}\\
+	    &     & \textcolor{gray}{\frac{y^{(1)}\left(x_1\right)}{1 !}=\textcolor{pink}{0}} & &\frac{1}{8}\\ 
+        \textcolor{gray}{\underbrace{\textcolor{black}{4}}_{x_1}} & 2    &&  \textcolor{gray}{\frac{y^{(2)}\left(x_1\right)}{\textcolor{red}{2!}}=\textcolor{violet}{0}}\\
+	    &     & \textcolor{gray}{\frac{y^{(1)}\left(x_1\right)}{1 !}=\textcolor{pink}{0}}\\ 
+        \textcolor{gray}{\underbrace{\textcolor{black}{4}}_{x_1}} & 2    
+
+	\end{array}
+\]
+This lead to the following result: $p_2=\textcolor{orange}{1}\cdot\pi_0 + \textcolor{blue}{1}\cdot \pi_1 + 0\cdot\pi_2-\frac{1}{8}\pi_3+\frac{1}{16}\pi_4$ when using the modified newton polynomials as they can be seen in \autoref{eq:modified_newton_polynomials}.
+\begin{equation}\label{eq:modified_newton_polynomials}
+\begin{aligned}
+& \pi_0=1 \\
+& \pi_1=\left(x-x_0\right)=(x-2) \\
+& \pi_2=\left(x-x_0\right)\left(x-x_0\right)=(x-2)^2 \\
+& \pi_3=\left(x-x_0\right)\left(x-x_0\right)\left(x-x_0\right)=(x-2)^3\\
+& \pi_4=\left(x-x_0\right)\left(x-x_0\right)\left(x-x_0\right)\left(x-x_1\right)=(x-2)^3(x-4) \\
+& \pi_5=\left(x-x_0\right)\left(x-x_0\right)\left(x-x_0\right)\left(x-x_1\right)\left(x-x_1\right)=(x-2)^3(x-4)^2
+\end{aligned}
+\end{equation}
+The problem with this method it is that it is not guarateed to find a solution for this problem, when not all derivatives are given. One then has to increase the order of the polynomial.\newline\newline
+\paragraph{Error}
+With \autoref{eq:oscullation_error_2} the error is then:
+$$
+\frac{y^{(6)}(\xi)}{6 !}(x-2)^3(x-4)^3
+$$
+The maximum error therefore is: $\left(\max \left| y^{(6)}(\xi) \right|\right)\cdot \left(\max \left|(x-2)^3(x-4)^3 \right| \right)\cdot \frac{1}{6!}$
+
+\subsection{Example 2}
+Compute two fourth-degree (!) polynomials, $p_1(x)$ and $p_2(x)$, meeting the constraints below:
+$$
+p_1(0)=p_1'(0)=p_1''(0)=\textcolor{blue}{0} \text{ and }p_1''(2)=\textcolor{violet}{0}
+$$
+and
+$$
+p_2(4)=2, p_2'(4)=0, p_2''(4)=0 \text{ and } p_2''(2)=0
+$$
+Moreover, the two polynomials should meet smoothly at the point (2,1) without a crinkle (with a common tangential line)
+To solve this problem we introduce a new variable called $a$ which defines the first derivative at point (2,1). When a is equal in both equations the meeting of the two polynomials is very smoothly.
+The first scheme looks like this:
+\[
+	\begin{array}{c|c|ccccc}
+ x & y & y' & y''/2! &y'''/3! &y''''/4! &y'''''/5!\\
+\hline
+	\textcolor{brown}{0} & \textcolor{orange}{0}\\
+	    &     & \textcolor{blue}{0} \\
+	\textcolor{brown}{0} & \textcolor{orange}{0}&             & \textcolor{red}{\frac{1}{2!}}\cdot \textcolor{green}{0}\\
+	    &     &  \textcolor{blue}{0}  &              & \textcolor{lime}{\frac{1}{8}}\\
+	\textcolor{brown}{0} & \textcolor{orange}{0} &             & \frac{1}{4} & & \frac{1}{16}\\           
+	    &     & \frac{1-\textcolor{orange}{0}}{2-\textcolor{brown}{0}}=\frac{1}{2} & & \vert\underline{\overline{B}}\vert   &    & \vert\underline{\overline{F}}\vert\\         
+	2 & 1    & &\vert\underline{\overline{A}}\vert & &\vert\underline{\overline{D}}\vert\\
+	    &     & \textcolor{pink}{a} & &\vert\underline{\overline{C}}\vert\\ 
+        2 & 1    &&  \textcolor{red}{\frac{1}{2!}}\cdot\textcolor{violet}{0}\\
+	    &     & \textcolor{pink}{a}\\ 
+        2 & 1        
+
+	\end{array}
+\]
+Where
+$$
+\begin{aligned}
+&\vert\underline{\overline{A}}\vert=\frac{a-\frac{1}{2}}{2-0}=\frac{2 a-1}{4} \\
+&\vert\underline{\overline{B}}\vert=\frac{\vert\underline{\overline{A}}\vert-\frac{1}{4}}{2-0}=\frac{2 a-2}{8}=\frac{a-1}{4} \\
+&\vert\underline{\overline{D}}\vert=\frac{\vert\underline{\overline{B}}\vert-\frac{1}{8}}{2-a}=\frac{2 a-3}{16} \\
+&\vert\underline{\overline{C}}\vert=\frac{0-\vert\underline{\overline{A}}\vert}{2-0}=\frac{1-2 a}{8} \\
+&\vert\underline{\overline{E}}\vert=\frac{\vert\underline{\overline{C}}\vert-\vert\underline{\overline{B}}\vert}{2-c}=\frac{3-4 a}{16} \\
+&\vert\underline{\overline{F}}\vert=\frac{\vert\underline{\overline{E}}\vert-\vert\underline{\overline{D}}\vert}{2-a}=\frac{3-3 a}{16}
+\end{aligned}
+$$
+since $p_1$ must be of order 4 se conclude that $\vert\underline{\overline{F}}\vert=0 $(!) and therefore $a=1$
+$$
+p_1 = 0+0+0+\frac{1}{8}x^3-\frac{1}{16}x^3(x-2)=\frac{1}{4}x^3-\frac{1}{16}x^4
+$$
+Now one can do the same thing for the next polynomial but a is this time known.
+When solving it one gets the following result:
+$$
+p_2=\frac{1}{16}x^4-\frac{3x^3}{4}+3x^2-4x+2
+$$
+
+\section{Multi-variable Polynomial Interpolation}
+The polynomial interpolation can also be used with a Multi-variate Polynomial Interpolation. Where the polynomial is represented by \autoref{eq:multi_variable_poly_interpolation}.
+\begin{equation}\label{eq:multi_variable_poly_interpolation}
+\begin{aligned}
+& p(x, y)=a_{0,0} \pi_0(x) \pi_0(y)+a_{1,0} \pi_1(x) \pi_0(y)+a_{0,1} \pi_0(x) \pi_1(y)+a_{1,1} \pi_1(x) \pi_1(y), \\
+& p(x, y)=a_{0,0} 1 \cdot 1+a_{1,0}\left(x-x_0\right) 1+a_{0,1} 1\left(y-y_0\right)+a_{1,1}\left(x-x_0\right)\left(y-y_0\right)
+\end{aligned}
+\end{equation}
+
+\subsection{Example: Multi-variable polynomial Interpolation}
+$p(x,y)$
+$p(0,0)=\textcolor{orange}{0}, p(1,0)=\textcolor{green}{1}, p(0,1)=0, p(1,1)=0.5$
+Now lets calculate the first x row:
+\[
+	\begin{array}{c|c|c}
+ x & z & y'\\
+\hline
+	\textcolor{brown}{0} & \textcolor{gray}{\underbrace{\textcolor{orange}{0}}_{a_{0}}}\\
+	    &     & \frac{\textcolor{green}{1}-\textcolor{orange}{0}}{\textcolor{violet}{1}-\textcolor{brown}{0}}=\textcolor{blue}{1} \\
+	\textcolor{violet}{1} & \textcolor{green}{1}
+	                     
+
+	\end{array}
+\]
+$$
+p(x;y_0=0)=\textcolor{orange}{0} + \textcolor{blue}{1} \cdot (x-\textcolor{brown}{0})
+$$
+Now lets calculate the second x row:
+\[
+	\begin{array}{c|c|c}
+ x & z & y'\\
+\hline
+	\textcolor{brown}{0} & \textcolor{gray}{\underbrace{\textcolor{orange}{1}}_{a_{0}}}\\
+	    &     & \frac{\textcolor{green}{0.5}-\textcolor{orange}{1}}{\textcolor{violet}{1}-\textcolor{brown}{0}}=\textcolor{olive}{-\frac{1}{2}} \\
+	\textcolor{violet}{1} & \textcolor{green}{0.5}
+	                     
+
+	\end{array}
+\]
+$$
+p(x;y_1=1)=\textcolor{orange}{1} + \textcolor{olive}{-\frac{1}{2}} \cdot (x-\textcolor{brown}{0})
+$$
+And in step 3 we combine those two.
+\[
+	\begin{array}{c|c|c}
+ y & z & y'\\
+\hline
+	\textcolor{brown}{0} & \textcolor{gray}{\underbrace{\textcolor{orange}{x}}_{a_{0}}}\\
+	    &     & \frac{(\textcolor{green}{1-\frac{1}{2}x})-\textcolor{orange}{x}}{\textcolor{violet}{1}-\textcolor{brown}{0}}=\textcolor{gray}{\underbrace{\textcolor{pink}{1-\frac{3}{2}x}}_{a_{1}}} \\
+	\textcolor{violet}{1} & \textcolor{green}{1-\frac{1}{2}x}
+	                     
+
+	\end{array}
+\]
+$$
+p(x,y)=\textcolor{orange}{x}\cdot 1 + (\textcolor{pink}{1-\frac{3}{2}x}) \cdot (y-\textcolor{brown}{0})=\underline{\underline{x-\frac{1}{2}\cdot x\cdot y}}
+$$
+\subsubsection{Alternative Method:}
+$$
+\begin{aligned}
+& p(x, y)=a_{0,0} \textcolor{ForestGreen}{\pi_0(x) \pi_0(y)}+a_{1,0} \textcolor{Cyan}{\pi_1(x) \pi_0(y)}+a_{0,1} \textcolor{pink}{\pi_0(x) \pi_1(y)}+a_{1,1} \textcolor{JungleGreen}{\pi_1(x) \pi_1(y)} \\
+& \underbrace{p(0, 0)}_{=\textcolor{orange}{0}}=a_{0,0} \cdot \textcolor{ForestGreen}{1} =\textcolor{orange}{0}\Rightarrow \textcolor{violet}{a_{0,0}=0}\\
+& \underbrace{p(1, 0)}_{=\textcolor{green}{1}}=\textcolor{violet}{a_{0,0}} \cdot \textcolor{ForestGreen}{1} + a_{1,0} \cdot \underbrace{\textcolor{Cyan}{x}}_{=1} =\textcolor{green}{1}\Rightarrow a_{1,0}=1\\
+& \underbrace{p(0, 1)}_{=0}=\textcolor{violet}{a_{0,0}} \cdot \textcolor{ForestGreen}{1} + a_{0,1} \cdot \underbrace{\textcolor{pink}{y}}_{=1} =0\Rightarrow a_{0,1}=0\\
+& \underbrace{p(1, 1)}_{=0.5}=\underbrace{\textcolor{violet}{a_{0,0}} \cdot \textcolor{ForestGreen}{1}}_{=0} + \underbrace{a_{1,0} \cdot \underbrace{\textcolor{Cyan}{x}}_{=1}}_{=1} + \underbrace{a_{0,1} \cdot \underbrace{\textcolor{pink}{y}}_{=1}}_{=0} + a_{1,1} \cdot \underbrace{\textcolor{JungleGreen}{x}}_{=1} \cdot \underbrace{\textcolor{JungleGreen}{y}}_{=1} =0\Rightarrow a_{1,1}=-0.5\\
+&p(x, y)=\underline{\underline{1\cdot \textcolor{Cyan}{x} - \frac{1}{2} \textcolor{JungleGreen}{x \cdot y}}}
+\end{aligned}
+$$
+
+\subsection{Questions}
+How many conditions are generally required
+\begin{itemize}
+\item for a tri-linear polynomial interpolation
+\begin{itemize}
+\item We have three dimensions and a linear polynomial $\Rightarrow$ we have 8 basis functions $(2\cdot 2 \cdot 2)\Rightarrow$ 8 conditions that are required:
+$$
+\begin{aligned}
+\{\pi_0(x);\pi_1(x)\} \rightarrow \{1;x\}=A\\
+\{\pi_0(y);\pi_1(y)\} \rightarrow \{1;y\}=B\\
+\{\pi_0(z);\pi_1(z)\} \rightarrow \{1;z\}=C\\
+A\cdot B\cdot C \Rightarrow \text{the basis is} 1;x,y,z,xy,xz,yz,xyz
+\end{aligned}
+$$
+\end{itemize}
+\item for a tri-cubic polynomial interpolation
+\begin{itemize}
+\item We have again three dimensions and each dimension has four newton basis polynomials $\Rightarrow 4 \cdot 4 \cdot 4 =64$
+\item We would need to define;
+$$
+\begin{aligned}
+8\text{ points}\\
+24 \text{ first derivatives, at each point three }\frac{\delta}{\delta x},\frac{\delta}{\delta y} ,\frac{\delta}{\delta z} \\
+24 \text{ second derivatives, at each point three }\frac{\delta^2}{\delta x \cdot \delta y},\frac{\delta^2}{\delta x \cdot \delta z} ,\frac{\delta^2}{\delta y \cdot \delta z}\\
+8 \text{ third derivatives, at each point one }\frac{\delta^3}{\delta x \cdot \delta y \cdot \delta z}
+\end{aligned}
+$$
+\end{itemize}
+\end{itemize}

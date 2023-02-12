@@ -1,0 +1,263 @@
+\section{Spline Interpolation}
+\subsection{Idea}
+The Idea of the spline interpolation is that one does not interpolate the data with a high degree polynomial, but with multiple polynomials of lower degree. Due to that the \href{https://en.wikipedia.org/wiki/Runge%27s_phenomenon}{runge phenomenon}  does not occur which occurs for high deggre interplations. When following this approach the transition of one spline ot the next must be considered. Normally one says that the derivative up ot an order n must be the same from one to the next spline. The drawback of this approach is that one needs a lot of storage, since one needs to store a lot of fucntions. The advantage is that it is easier to calculate, since the newton interpolation has a complexity of $n^2$ whereas a cubic spline interpolation has a complexity of $n$.
+\subsection{Cubic Spline}
+\subsubsection{Solve problem}
+A spline can be described with \autoref{eq:spline_s}
+\begin{equation}\label{eq:spline_s}
+\begin{gathered}
+S_{i}(x)=a_{i}+b_{i}\left(x-x_{i}\right)+c_{i}\left(x-x_{i}\right)^{2}+d_{i}\left(x-x_{i}\right)^{3} \\
+S_{i}^{\prime}=b_{i}+2 c_{i}\left(x-x_{i}\right)+3 d_{i}\left(x-x_{i}\right)^{2} \\
+S_{i}^{\prime \prime}=2 c_{i}+6 d_{i}\left(x-x_{i}\right)
+\end{gathered}
+\end{equation}
+
+% \paragraph{Formulas for the cubic natural spline interpolation S}
+% \begin{equation}\label{eq:cubic_spline_dn}
+% S_i{ }^{\prime \prime}\left(x_i\right)=S_{i-1}{ }^{\prime \prime}\left(x_i\right) \Rightarrow d_{i-1}=\frac{c_i-c_{i-1}}{3 h_{i-1}} \quad(i=1, \ldots, n-1)
+% \end{equation}
+% \begin{equation}\label{eq:cubic_spline_dn-1}
+% d_{n-1} \text { by }-\frac{c_{n-1}}{3 h_{n-1}}
+% \end{equation}
+% \begin{equation}\label{eq:cubic_spline_bn}
+% S_i\left(x_i\right)=S_{i-1}\left(x_i\right) \Rightarrow b_{i-1}=\frac{a_i-a_{i-1}}{h_{i-1}}-\frac{2 c_{i-1}+c_i}{3} h_{i-1} \quad(i=1, \ldots, n-1)
+% \end{equation}
+% \begin{equation}\label{eq:cubic_spline_bn-1}
+% b_{n-1}=\frac{y_n-a_{n-1}}{h_{n-1}}-c_{n-1} h_{n-1}-d_{n-1} h_{n-1}^2
+% \end{equation}
+% \begin{equation}
+% q_i=y_i
+% \end{equation}
+\subsubsection{Natrual Splining}
+In natural splines the energy is minimized, therefore $\underline{y_{0}^{\prime \prime}=0}=y_{n}^{\prime \prime}$  $\left(\min \int\left|f^{\prime \prime}(x)\right|^{2} \mathrm{~d} x\right)$
+\begin{itemize}
+    \item For natural spline $c_0$ and $c_n$ are given by \autoref{eq:natural_spline_c}
+    \begin{equation}\label{eq:natural_spline_c}
+    c_{0}=c_{n}=0
+    \end{equation}
+    \item For cubic splines the $a$ coefficients can be calculated according to \autoref{eq:natural_spline_a}
+    \begin{equation}\label{eq:natural_spline_a}
+    a_i=y_i \quad (i=0,...,n-1)
+    \end{equation}
+    \item The $b$ coefficients can be calculated according to \autoref{eq:natural_spline_b}
+    \begin{equation}\label{eq:natural_spline_b}
+    \begin{aligned}
+    & b_{n-1}=\frac{y_n-a_{n-1}}{h_{n-1}}-c_{n-1} h_{n-1}-d_{n-1} h_{n-1}^2=\frac{y_n-y_{n-1}}{h_{n-1}}-\frac{2}{3} c_{n-1} h_{n-1} \\
+    & b_{n-1}=b_{n-2}+2 c_{n-2} h_{n-2}+3 d_{n-2} h_{n-2}{ }^2=\frac{a_{n-1}-a_{n-2}}{h_{n-2}}-\frac{2 c_{n-2}+c_{n-1}}{3} h_{n-2}+2 c_{n-2} h_{n-2}+\left(c_{n-1}-c_{n-2}\right) h_{n-2}
+    \end{aligned}
+    \end{equation}
+    \item The $d$ coefficients are given by \autoref{eq:natural_spline_d}
+    \begin{equation}\label{eq:natural_spline_d}
+        d_{n-1}=-\frac{c_{n-1}}{3 h_{n-1}}
+    \end{equation}
+    \item solve equation system after $c_{i}$:
+\end{itemize}
+
+\begin{equation} 
+\resizebox{1\textwidth}{!}{
+    $\begin{bmatrix} 
+        2(h_0+h_1) & h_1 &  &  &\\ 
+         h_1 & 2(h_1+h_2) & h_2 &  &\\ 
+          & h_2 & 2(h_2+h_3) & h_3 & \\ 
+          & \ddots & \ddots & \ddots & \\ 
+          &  &  &  &  &  \\
+          &  & h_{n-3} & 2(h_{n-3}+h_{n-2}) & h_{n-2} \\
+          &  & & h_{n-2} & 2(h_{n-2}+h_{n-1})
+    \end{bmatrix}
+    \cdot 
+    \begin{pmatrix} 
+        c_1\\ 
+        c_2\\ 
+        c_3\\
+        \vdots\\
+        \\
+        c_{n-2}\\
+        c_{n-1}
+    \end{pmatrix} = 
+    \begin{pmatrix} 
+        3\left(\frac{y_{2}-y_1}{h_{1}}-\frac{y_1-y_{0}}{h_{0}}\right)\\ 
+        3\left(\frac{y_{3}-y_2}{h_2}-\frac{y_2-y_{1}}{h_{1}}\right)\\ 
+        3\left(\frac{y_{4}-y_3}{h_3}-\frac{y_3-y_{2}}{h_{2}}\right)\\ 
+        \vdots\\ 
+        3\left(\frac{y_{i+1}-y_i}{h_i}-\frac{y_i-y_{i-1}}{h_{i-1}}\right)\\ 
+        3\left(\frac{y_{i+1}-y_i}{h_i}-\frac{y_i-y_{i-1}}{h_{i-1}}\right)
+    \end{pmatrix}$
+}\end{equation}
+\paragraph{Error Calculation for cubic splines with $C^2$}
+\begin{equation}\label{eq:spline_osculation_error_periodic}
+\begin{aligned}
+&|y(x)-S(x)| \leq \max \frac{\left|y^{(4)}(x)\right|}{4 !} \frac{5 H^4}{16}=\max \left|y^{(4)}(x)\right| \frac{5}{384} H^4\\
+&\left|y^{\prime}(x)-S^{\prime}(x)\right| \leq \max \frac{\left|y^{(4)}(x)\right|}{4 !} H^3=\max \left|y^{(4)}(x)\right| \frac{1}{24} H^3\\
+&\left|y^{\prime \prime}(x)-S^{\prime \prime}(x)\right| \leq \max \left|y^{(4)}(x)\right| \frac{3}{8} H^2 \quad x \in\left[x_0, x_n\right], \quad H=\max _{i=0, \ldots, n-1} h_i
+\end{aligned}
+\end{equation}
+
+\subsubsection{Formulas for the cubic \textbf{clamped} spline interpolation S}
+\begin{itemize}
+    \item $b_{0}=y_{0}^{\prime} ; b_{n}=y_{n}^{\prime}$
+    \item solve equation system after $c_{i}$:
+\end{itemize}
+% \begin{equation}\label{eq:cubic_clamped_spline_bn-1}
+% S^{\prime}\left(x_n\right)=y_n^{\prime} \Rightarrow b_{n-1}+2 c_{n-1} h_{n-1}+3 d_{n-1} h_{n-1}{ }^2=y_{{ }_n}
+% \end{equation}
+\begin{equation} 
+\resizebox{1\textwidth}{!}{
+    $\begin{bmatrix} 
+        2h_0& h_0\\
+        h_0 & 2(h_0+h_1) & h_1 &  &  &\\ 
+        & h_1 & 2(h_1+h_2) & h_2 &  &\\ 
+        &  & h_2 & 2(h_2+h_3) & h_3 & \\ 
+        &  & \ddots & \ddots & \ddots & \\ 
+        &  &  &  &  &  &  \\
+        &  &  & h_{n-3} & 2(h_{n-3}+h_{n-2}) & h_{n-2} \\
+        &  &  & & 2h_{n-2} & 4h_{n-2} + 3h_{n-1}
+    \end{bmatrix}
+    \cdot 
+    \begin{pmatrix} 
+        c_0\\ 
+        c_1\\ 
+        c_2\\
+        \vdots\\
+        c_{n-2}\\
+        c_{n-1}
+    \end{pmatrix} = 
+    \begin{pmatrix} 
+        3\left(\frac{a_1-a_0}{h_0}-y_0^{\prime}\right)\\ 
+        \vdots\\ 
+        \left(3\left(\frac{y_{i+1}-y_i}{h_i}-\frac{y_i-y_{i-1}}{h_{i-1}}\right)\right)_{i=1, \ldots n-2}\\ 
+        \vdots\\ 
+        9 \frac{y_n-a_{n-1}}{h_{n-1}}-6 \frac{a_{n-1}-a_{n-2}}{h_{n-2}}-3 y_n^{\prime}\\ 
+    \end{pmatrix}$}
+\end{equation}
+\begin{itemize}
+    \item $b_{i-1}=\frac{a_{i}-a_{i-1}}{h_{i-1}}-\frac{2 c_{i-1}+c_{i}}{3} h_{i-1} \quad(i=1, \ldots n-1)$
+    \item $b_{n-1}=\frac{y_{n}-a_{n-1}}{h_{n-1}}-c_{n-1} h_{n-1}-d_{n-1} h_{n-1}^{2}=\frac{y_{n}-y_{n-1}}{h_{n-1}}-\frac{2}{3} c_{n-1} h_{n-1}$
+    \item $d_{i-1}=\frac{c_{i}-c_{i-1}}{3 h_{i-1}} \quad(i=1, \ldots n-1)$
+    \item Clamped splining: $d_{n-1}=\frac{y_{n}^{\prime}-b_{n-1}-2 c_{n-1} h_{n-1}}{3 h_{n-1}^{2}} \quad$ Natural Splining: $d_{n-1}=-\frac{c_{n-1}}{3 h_{n-1}}$
+\end{itemize}
+\subsubsection{Example Natural Spline}
+Calculate the natural cubic spline-interpolation for a sine function $sin(x)$ in the interval $[0, \pi]$ according to the points $\{\textcolor{blue}{0}, \textcolor{orange}{\frac{\pi}{2}}, \pi\}$. Also calculate the maximum error.\newline
+From \autoref{eq:spline_s} one knows that 
+$$
+\begin{aligned}
+   &S_0(x)=a_0+b_0(x-\textcolor{blue}{0})+c_0(x-\textcolor{blue}{0})^2+d_0(x-\textcolor{blue}{0})^3\\
+   &S_1(x)=a_1+b_1(x-\textcolor{orange}{\frac{\pi}{2}})+c_1(x-\textcolor{orange}{\frac{\pi}{2}})^2+d_1(x-\textcolor{orange}{\frac{\pi}{2}})^3
+\end{aligned}
+$$
+Furthermore $\underline{c_0=0}$ (\autoref{eq:natural_spline_c}) since we use natural splines and $\underline{a_0=y_0=0, a_1=y_1=1}$ (\autoref{eq:natural_spline_a}). 
+From \autoref{eq:spline_osculation_error_periodic} one can write down the following equations:
+$$
+\begin{aligned}
+    &\left(2(h_0+h_1)\right)\cdot\left(c_1\right)=3\left(\frac{y_{2}-y_1}{h_{1}}-\frac{y_1-y_{0}}{h_{0}}\right)\\
+    &\left(2\left(\frac{\pi}{2}+\frac{\pi}{2}\right)\right)\cdot\left(c_1\right)=3\left(\frac{0-1}{\frac{\pi}{2}}-\frac{1-0}{\frac{\pi}{2}}\right)\\
+    &\left(2\pi \right)=3\left(\frac{-12}{\pi}\right) \Rightarrow \underline{c_1=\frac{-6}{\pi^2}}\\
+\end{aligned}
+$$
+From \autoref{eq:natural_spline_b} one knows that 
+$$
+b_0=\frac{y_1-y_0}{\pi/2}-\frac{2c_0-c_1}{3}\cdot \frac{\pi}{2}=\frac{2}{\pi}+\frac{2}{\pi^2}+\frac{\pi}{2}=\underline{\frac{3}{\pi}}
+$$
+From \autoref{eq:natural_spline_d} one knows that
+$$
+d_0=\frac{c_1-c_0}{3\cdot \frac{\pi}{2}}=\frac{-6}{\pi^2}\cdot \frac{2}{3\cdot \pi}=\underline{\frac{-4}{\pi^3}}
+$$
+$$
+d_1=\frac{c_2-c_1}{3\cdot \frac{\pi}{2}}=\underline{\frac{4}{\pi^3}}
+$$
+And finally from \autoref{eq:natural_spline_b} that:
+$$
+b_1=\frac{y_2-y_1}{\pi/2}-\frac{2c_1-c_2}{3}\cdot \frac{\pi}{2}=\-\frac{2}{\pi}+\frac{2}{\pi}=\underline{0}
+$$
+The error can then be estimated with \autoref{eq:spline_osculation_error_periodic}.
+$$
+\mid y-s \mid \leq \max _{[0, \pi]} \frac{\overbrace{\mid y^4(\xi)\mid}^{sin(\xi)}}{4 !} \cdot \frac{5\cdot \left(\frac{\pi}{2}\right)^4}{16}=\underline{1\cdot \frac{5\cdot \pi^4}{384 \cdot 16}}
+$$
+\subsubsection{Example}\label{subsubsec:ex_spline}
+The data below was generated by the sine function. In this example, the natural and clamped spline as well as the max error are calculated.
+$$
+\begin{array}{|c|cccc|}
+\hline x_i & 0 & \pi / 3 & 2 \pi / 3 & \pi \\
+\hline y_i & 0 & \sqrt{3} / 2 & \sqrt{3} / 2 & 0 \\
+\hline
+\end{array}
+$$
+\paragraph{natural Spline}
+
+\begin{equation}
+\left(\begin{array}{cc}
+2 \frac{2 \pi}{3} & \frac{\pi}{3} \\
+\frac{\pi}{3} & 2 \frac{2 \pi}{3}
+\end{array}\right)\left(\begin{array}{l}
+c_1 \\
+c_2
+\end{array}\right)=\left(\begin{array}{c}
+3\left(\frac{a_2-a_1}{h}-\frac{a_1-a_0}{h}\right) \\
+3\left(\frac{a_3-a_2}{h}-\frac{a_2-a_1}{h}\right)
+\end{array}\right)=\left(\begin{array}{c}
+-\frac{9 \sqrt{3}}{2 \pi} \\
+-\frac{9 \sqrt{3}}{2 \pi}
+\end{array}\right)
+\end{equation}
+$$
+\begin{aligned}
+&\Longrightarrow c_1=\frac{-27 \sqrt{3}}{10 \pi^2} ; c_2=\frac{-27 \sqrt{3}}{10 \pi^2}\\
+&\Longrightarrow d_0=\frac{c_1-c_0}{3\left(\frac{\pi}{3}\right)}=\frac{-27 \sqrt{3}}{10 \pi^3} ; d_1=\frac{c_2-c_1}{3 \cdot h}=0 \text{ (\autoref{eq:cubic_spline_dn})} \\
+&\Longrightarrow d_2=\frac{-c_2}{3 h}=\frac{27 \sqrt{3}}{\pi^3 10} \text{ (\autoref{eq:cubic_spline_dn-1})} \\
+&\Longrightarrow b_0=\frac{a_1-a_0}{h}-\frac{2 c_0+c_1}{3} \cdot h=\frac{9 \sqrt{3}}{5 \pi} \text{ (\autoref{eq:cubic_spline_bn})}\\
+&\Longrightarrow b_1=\frac{a_2-a_1}{h}-\frac{2 c_1+c_2}{3} h=\frac{9 \sqrt{3}}{10 \pi} \text{ (\autoref{eq:cubic_spline_bn})}\\
+&\Longrightarrow b_2=\frac{a_3-a_2}{h}-c_2 \frac{\pi}{3}-d_2\left(\frac{\pi}{3}\right)^2=\frac{-9 \sqrt{3}}{10 \pi}\text{ (\autoref{eq:cubic_spline_bn-1})}
+\end{aligned}
+$$
+$$
+\begin{aligned}
+&S_0(x)=0+\frac{9 \sqrt{3}}{5 \pi}(x-0)+0(x-0)^2-\frac{27 \sqrt{3}}{10 \pi^3}(x-0)^3 \text{ (\autoref{eq:spline_s})}\\
+&\left(0 \leq x \leq \frac{\pi}{3}\right) \\
+&S_1(x)=\frac{\sqrt{3}}{2}+\frac{9 \sqrt{3}}{10 \pi}\left(x-\frac{\pi}{3}\right)-\frac{27 \sqrt{3}}{10 \pi^2}\left(x-\frac{\pi}{3}\right)^2+0\left(x-\frac{\pi}{3}\right)^3 \\
+&\left(\frac{\pi}{3} \leq x \leq \frac{2 \pi}{3}\right) \\
+&\rho_2(x)=\frac{\sqrt{3}}{2}-\frac{9 \sqrt{3}}{10 \pi}\left(x-\frac{2 \pi}{3}\right)-\frac{27 \sqrt{3}}{10 \pi^2}\left(x-\frac{2 \pi}{3}\right)^2+\frac{27 \sqrt{3}}{10 \pi^3}\left(x-\frac{2 \pi}{3}\right)^3 \\
+&\left(\frac{2 \pi}{3} \leq x \leq \pi\right)
+\end{aligned}
+$$
+
+\paragraph{clamped Spline}
+\begin{equation}
+\resizebox{1\textwidth}{!}{$
+\left(\begin{array}{ccc}
+2 \cdot \frac{\pi}{3}& \frac{\pi}{3} & \\
+\frac{\pi}{3} & 2 \cdot \left(\frac{\pi}{3}+\frac{\pi}{3}\right) & \frac{\pi}{3} \\
+& 2 \cdot \frac{\pi}{3} & 4 \frac{\pi}{3}+3 \frac{\pi}{3}
+\end{array}\right)\left(\begin{array}{l}
+c_0 \\
+c_1  \\
+c_2
+\end{array}\right)=\left(\begin{array}{c}
+3\left(\frac{y_1-y_0}{h}-y_0^{\prime}\right)\\
+3\left(\frac{y_2-y_1}{h}-\frac{y_1-y_0}{h}\right) \\
+9\left(\frac{y_3-y_2}{h}\right)-6\left(\frac{y_2-y_1}{h}\right)-3 y_3^{\prime}
+\end{array}\right)=\left(\begin{array}{c}
+\frac{9 \sqrt{3}}{2 \pi}-3\\
+-\frac{9 \sqrt{3}}{2 \pi}\\
+9\left(\frac{-\sqrt{3} \cdot 3}{2 \pi}\right)-6 \cdot 0+3=\frac{-27 \sqrt{3}}{2 \pi}+3
+\end{array}\right)$}
+\end{equation}
+$$
+\begin{aligned}
+&\Longrightarrow c_0=\frac{-10 \pi+18 \sqrt{3}}{2 \pi^2} ; c_1=\frac{2 \pi-9 \sqrt{3}}{2 \pi^2} ; \quad c_2=\frac{2 \pi-9 \sqrt{3}}{2 \pi^2}\\
+&\Longrightarrow d_0=\frac{c_1-c_0}{3 \hbar}=\frac{1}{\pi} \frac{12 \pi-27 \sqrt{3}}{2 \pi^2} ; d_1=\frac{c_2-c_1}{3 h}=\frac{1}{\pi} \cdot 0=0 \text{ (\autoref{eq:cubic_spline_dn})}\\
+&\Longrightarrow d_2=\left(\frac{y_3-y_2}{h}-c_2 h-b_2\right) / h^2=\ldots=\frac{27 \sqrt{3}-12 \pi}{2 \pi 3} \text{ (?)}\\
+&\Longrightarrow b_0=\frac{y_1-y_0}{h}-\frac{2 c_0+c_1}{3} h =\frac{3}{\pi} \frac{\sqrt{3}}{2}-\frac{-18 \pi+27 \sqrt{3}}{2 \pi^2 \cdot 3} \cdot \frac{\pi}{3}= \frac{6 \pi-0 \sqrt{3}}{2 \pi \cdot 3}=1 \text{ (\autoref{eq:cubic_spline_bn})}\\
+&\Longrightarrow b_1=\frac{y_2-y_1}{h}-\frac{2 c_1+c_2}{3} h=0-\frac{6 \pi-27 \sqrt{3}}{2 \pi^2 \cdot 3} \cdot \frac{\pi}{3}=-\frac{2 \pi-9 \sqrt{3}}{6 \pi} \text{ (\autoref{eq:cubic_spline_bn})}\\
+&\Longrightarrow b_2=b_1+2 c_1 h+3 d_1 h^2=\ldots=\frac{1}{3}-\frac{3 \sqrt{3}}{2 \pi} \text{ (\autoref{eq:cubic_clamped_spline_bn-1})}
+\end{aligned}
+$$
+For the two examples above (natural and clamped) give maximum estimations for the following error quantities $\mid y(x)- S(x)\mid$, $\mid y'(x)- S'(x)\mid$ and $\mid y''(x)- S''(x)\mid$. The osculation error of a cubic spline can be calculated with \autoref{eq:spline_osculation_error_normal} and the osculation error of a periodic cubic spline ($\left.y_0=y_n \Rightarrow S\left(x_0\right)=S\left(x_n\right)\right)$) with \autoref{eq:spline_osculation_error_periodic}.,
+
+$$
+\begin{aligned}
+\mid y-s \mid & \leq \max \mid y^{(4)}(x) \mid \cdot \frac{5}{384} H^4 \quad\left(H=\max h_i\right) \\
+&=\max \mid \sin (x) \mid \cdot \frac{5}{384} \cdot\left(\frac{\pi}{3}\right)^4 \\
+&=1 \cdot \frac{5}{384} \cdot \frac{\pi^4}{81} \approx 0.01565 \\
+\left|y^{\prime}-S^{\prime}\right| & \leq \max \mid y^{(4)}(x) \mid \frac{H^3}{24}=1 \cdot \frac{\pi}{27 \cdot 24} \approx 0.047849 \\
+\left|y^{\prime \prime}-S^{\prime \prime}\right| & \leqslant \max \mid y^{(4)}(x) \mid \frac{3}{8} H^2=1 \cdot \frac{3}{8} \frac{\pi^2}{9} \approx 0.411234
+\end{aligned}
+$$
